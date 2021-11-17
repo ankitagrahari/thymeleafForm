@@ -1,0 +1,179 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Registration page</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script language="JavaScript">
+            function setVisibility(id, visibility) {
+                document.getElementById(id).style.display = visibility;
+            }
+        </script>
+    </head>
+    <body>
+        <div align="center" class="col-md-12">
+            <h2>Welcome to Registration page</h2>
+            <div class="col-md-6">
+              <form action="#" th:action="@{/saveControls}" th:object="${controls}" method="post" enctype="multipart/form-data" >
+                  <div class="form-group" th:align="left">
+                      <label style="font-weight: bolder" for="name">Name:</label>
+                      <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                      <p class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                  </div>
+                  <div class="form-group"  th:align="left">
+                      <label style="font-weight: bolder" for="version">Version:</label>
+                      <input type="text" class="form-control" id="version" th:field="*{version}">
+                      <p class="alert alert-danger" th:if="${#fields.hasErrors('version')}" th:errors="*{version}">
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <label style="font-weight: bolder" for="guid">GUID:</label>
+                      <input type="text" class="form-control" id="guid" th:field="*{guid}">
+                      <p class="alert alert-danger" th:if="${#fields.hasErrors('guid')}" th:errors="*{guid}">
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <label style="font-weight: bolder" for="description">Description:</label>
+                      <div class="form-group">
+                          <label style="font-weight: bold" for="description.defaultDescription">Default Description:</label>
+                          <input type="text" class="form-control" id="defaultDescription" th:field="*{description.defaultDescription}">
+                          <br>
+                          <label style="font-weight: bold" for="description.detailedDescription">Detailed Description:</label>
+                          <input type="text" class="form-control" id="detailedDescription" th:field="*{description.detailedDescription}">
+                      </div>
+                      <div class="form-group">
+                          <label style="font-weight: bold" for="description.auditDescription">Audit Description:</label>
+                          <input type="text" class="form-control" id="auditDescription" th:field="*{description.auditDescription}">
+                          <br>
+                          <label style="font-weight: bold"  for="description.remediationDescription">Remediation Description:</label>
+                          <input type="text" class="form-control" id="remediationDescription" th:field="*{description.remediationDescription}">
+                      </div>
+                      <p class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <label style="font-weight: bolder" for="returnType">Return Type:</label>
+                      <input type="text" class="form-control" id="returnType" th:field="*{returnType}" required>
+                  </div>
+                  <div style="font-weight: bolder" class="form-group" th:align="left">
+                      <label for="platformType">Platform Type:</label>
+                      <input type="text" class="form-control" id="platformType" th:field="*{platformType}" required>
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <label style="font-weight: bolder" for="platformSupported">Choose Supported Platform</label>
+                      <select class="custom-select " th:field="*{platformSupported}" id="platformSupported" multiple required>
+                          <option value="">Nothing selected</option>
+                          <option th:each="platformSupported : ${T(com.dynamicallyblunt.tech.thymeleafform.beans.SupportedPlatforms).values()}"
+                                  th:value="${platformSupported}"
+                                  th:text="${platformSupported}">platformSupported
+                          </option>
+                      </select>
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <label style="font-weight: bolder" for="imports">Import Packages:</label>
+                      <input type="text" class="form-control" id="imports" th:field="*{imports}">
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <div class="form-group">
+                          <label style="font-weight: bolder" for="scripts">Scripts</label>
+                          <button class="btn btn-info" th:align="right" th:nowrap="true" type="submit" name="addScript" id="addScript">Add Script</button>
+                      </div>
+                      <div th:if="*{scripts}">
+                          <table cellpadding="5px 15px;">
+                              <thead>
+                              <tr>
+                                  <th>Index</th>
+                                  <th>Name</th>
+                                  <th>Validate Method</th>
+                                  <th>Evaluate Method</th>
+                                  <th>Remediate Method</th>
+                                  <th></th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr th:each="script, stat: *{scripts}">
+                                  <td th:text="${stat.count}">1</td>
+                                  <td><input type="text" class="form-control" th:field="*{scripts[__${stat.index}__].name}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{scripts[__${stat.index}__].validateMethod}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{scripts[__${stat.index}__].evaluateMethod}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{scripts[__${stat.index}__].remediateMethod}"></td>
+                                  <td><button class="btn btn-info" type="submit" name="removeScript" id="removeScript" th:value="${stat.index}">Remove</button></td>
+                              </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  <div class="custom-file">
+                      <label style="font-weight: bold" for="evalChooseFile" class="custom-file-label">Choose Evaluate Code file</label>
+                      <input type="file" name="evaluatePyFile" th:field="*{evaluatePyFile}" class="custom-file-input">
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <div class="form-group">
+                          <label style="font-weight: bolder" for="evaluateArguments">Evaluate Arguments</label>
+                          <button class="btn btn-info" th:nowrap="true" th:align="right" type="submit" name="addEvaluateArgs" id="addEvaluateArgs">Add Evaluate Arguments</button>
+                      </div>
+                      <div th:if="*{evaluateArguments}">
+                          <table cellpadding="5px 15px;">
+                              <thead>
+                              <tr>
+                                  <th>Index</th>
+                                  <th>Type</th>
+                                  <th>Default Label</th>
+                                  <th>Default Description</th>
+                                  <th>Default Value</th>
+                                  <th></th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr th:each="eval, stat: *{evaluateArguments}">
+                                  <td th:text="${stat.count}">1</td>
+                                  <td><input type="text" class="form-control" th:field="*{evaluateArguments[__${stat.index}__].type}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{evaluateArguments[__${stat.index}__].defaultLabel}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{evaluateArguments[__${stat.index}__].defaultDescription}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{evaluateArguments[__${stat.index}__].defaultValue}"></td>
+                                  <td><button class="btn btn-info" type="submit" name="removeEvaluateArgs" id="removeEvaluateArgs" th:value="${stat.index}">Remove</button></td>
+                              </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  <div class="custom-file">
+                      <label style="font-weight: bold" for="remChooseFile" class="custom-file-label">Choose Remediate Code</label>
+                      <input type="file" name="remediatePyFile" th:field="*{remediatePyFile}" class="custom-file-input">
+                  </div>
+                  <div class="form-group" th:align="left">
+                      <div class="form-group">
+                          <label style="font-weight: bolder" for="remediateArguments">Remediate Arguments</label>
+                          <button class="btn btn-info" th:nowrap="true" th:align="right" type="submit" name="addRemediateArgs" id="addRemediateArgs">Add Remediate Arguments</button>
+                      </div>
+                      <div th:if="*{remediateArguments}">
+                          <table cellpadding="5px 15px;">
+                              <thead>
+                              <tr>
+                                  <th>Index</th>
+                                  <th>Type</th>
+                                  <th>Default Label</th>
+                                  <th>Default Description</th>
+                                  <th>Default Value</th>
+                                  <th></th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr th:each="rem, stat: *{remediateArguments}">
+                                  <td th:text="${stat.count}">1</td>
+                                  <td><input type="text" class="form-control" th:field="*{remediateArguments[__${stat.index}__].type}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{remediateArguments[__${stat.index}__].defaultLabel}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{remediateArguments[__${stat.index}__].defaultDescription}"></td>
+                                  <td><input type="text" class="form-control" th:field="*{remediateArguments[__${stat.index}__].defaultValue}"></td>
+                                  <td><button class="btn btn-info" type="submit" name="removeRemediateArgs" id="removeRemediateArgs" th:value="${stat.index}">Remove</button></td>
+                              </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-primary">Save Control</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+    </body>
+</html>
