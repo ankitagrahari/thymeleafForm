@@ -13,7 +13,7 @@ public class Controls {
     private String guid;
     private Description description;
     private String returnType;
-    private String platformType;
+    private PlatformType[] platformType;
     private SupportedPlatforms[] platformSupported;
     private String[] imports;
     private List<Script> scripts;

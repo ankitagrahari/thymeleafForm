@@ -55,7 +55,13 @@
                   </div>
                   <div style="font-weight: bolder" class="form-group" th:align="left">
                       <label for="platformType">Platform Type:</label>
-                      <input type="text" class="form-control" id="platformType" th:field="*{platformType}" required>
+                      <select class="custom-select " th:field="*{platformType}" id="platformType" multiple required>
+                          <option value="">Nothing selected</option>
+                          <option th:each="platformType : ${T(com.dynamicallyblunt.tech.thymeleafform.beans.PlatformType).values()}"
+                                  th:value="${platformType}"
+                                  th:text="${platformType}">platformType
+                          </option>
+                      </select>
                   </div>
                   <div class="form-group" th:align="left">
                       <label style="font-weight: bolder" for="platformSupported">Choose Supported Platform</label>
